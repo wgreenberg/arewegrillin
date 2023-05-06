@@ -18,7 +18,7 @@ type Status = RwLock<String>;
 fn index(status: &State<Status>) -> Template {
     Template::render("index", context! {
         status: status.read().unwrap().to_string(),
-        image_url: "/public/grill1.jpg",
+        image_url: "/public/grill3.jpg",
     })
 }
 
