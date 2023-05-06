@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>don't fuck this up for me</title>
+        <script>
+            window.addEventListener('load', () => {
+                const form = document.getElementById('form');
+                form.addEventListener('submit', (event) => {
+                    event.preventDefault();
+                    const xhr = new XMLHttpRequest();
+                    function setResult(event) {
+                        document.getElementById('result').innerText = event.target.responseText;
+                    }
+                    xhr.addEventListener('load', setResult);
+                    xhr.addEventListener('error', setResult);
+                    xhr.open('POST', '/set');
+                    xhr.send(new FormData(form))
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <span>current status: {{ status }}</span>
+        <form id="form" action="/set" method="post">
+            <div>
+                <label for="status">are ya grillin?</label>
+                <input type="text" name="status" id="status" required>
+            </div>
+            <div>
+                <label for="password">prove it</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <div>
+                <input type="submit" value="lunch">
+            </div>
+        </form>
+        <div><span id="result"></span></div>
+    </body>
+</html>
