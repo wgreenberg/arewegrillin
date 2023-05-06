@@ -37,8 +37,10 @@ fn set_form(status: &State<Status>) -> Template {
 fn set(status: &State<Status>, request: Form<SetRequest>) -> &'static str {
     let expected_password = var("SECRET").unwrap_or("grillpilled1312".into());
     if request.password != expected_password {
+        println!("failed password attempt: \"{}\"", request.password);
         "never talk to me again"
     } else {
+        println!("successfully set new status: \"{}\"", request.status);
         *status.write().unwrap() = request.status.clone();
         "ok"
     }
