@@ -17,7 +17,8 @@ type Status = RwLock<String>;
 #[get("/")]
 fn index(status: &State<Status>) -> Template {
     Template::render("index", context! {
-        status: status.read().unwrap().to_string()
+        status: status.read().unwrap().to_string(),
+        image_url: "/public/grill1.jpg",
     })
 }
 
@@ -30,7 +31,7 @@ struct SetRequest {
 #[get("/set")]
 fn set_form(status: &State<Status>) -> Template {
     Template::render("set", context! {
-        status: status.read().unwrap().to_string()
+        status: status.read().unwrap().to_string(),
     })
 }
 
