@@ -1,4 +1,4 @@
-use std::sync::Mutex;
+use std::sync::RwLock;
 use std::env::var;
 use rocket::{
     launch,
@@ -11,12 +11,12 @@ use rocket::{
 };
 use rocket_dyn_templates::{Template, context};
 
-type Status = Mutex<String>;
+type Status = RwLock<String>;
 
 #[get("/")]
 fn index(status: &State<Status>) -> Template {
     Template::render("index", context! {
-        status: status.lock().unwrap().to_string()
+        status: status.read().unwrap().to_string()
     })
 }
 
@@ -29,17 +29,17 @@ struct SetRequest {
 #[get("/set")]
 fn set_form(status: &State<Status>) -> Template {
     Template::render("set", context! {
-        status: status.lock().unwrap().to_string()
+        status: status.read().unwrap().to_string()
     })
 }
 
 #[post("/set", data = "<request>")]
 fn set(status: &State<Status>, request: Form<SetRequest>) -> &'static str {
-    let expected_password = var("SECRET").unwrap_or("grillpilled".into());
+    let expected_password = var("SECRET").unwrap_or("grillpilled1312".into());
     if request.password != expected_password {
         "never talk to me again"
     } else {
-        *status.lock().unwrap() = request.status.clone();
+        *status.write().unwrap() = request.status.clone();
         "ok"
     }
 }
@@ -49,6 +49,6 @@ fn serve() -> _ {
     let status = "NO".to_string();
     rocket::build()
         .mount("/", routes![index, set_form, set])
-        .manage(Mutex::new(status))
+        .manage(RwLock::new(status))
         .attach(Template::fairing())
 }
