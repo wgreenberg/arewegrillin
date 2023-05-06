@@ -8,6 +8,7 @@ use rocket::{
     State,
     FromForm,
     form::Form,
+    fs::FileServer,
 };
 use rocket_dyn_templates::{Template, context};
 
@@ -54,6 +55,7 @@ fn serve() -> _ {
     }
     rocket::build()
         .mount("/", routes![index, set_form, set])
+        .mount("/public", FileServer::from(var("STATIC_DIR").expect("must set static dir")))
         .manage(RwLock::new(status))
         .attach(Template::fairing())
 }

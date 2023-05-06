@@ -1,9 +1,25 @@
 <html>
     <head>
         <title>ARE WE GRILLIN?</title>
+        <style>
+            img {
+                width: 80%;
+                height: auto;
+            }
+
+            .content {
+                align: center;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+        </style>
     </head>
     <body>
-        <h1>ARE WE GRILLIN?</h1>
-        <span>{{ status }}</span>
+        <div class="content">
+            <h1>ARE WE GRILLIN?</h1>
+            <span>{{ status }}</span>
+            <img src="/public/grill3.jpg">
+        </div>
     </body>
 </html>
