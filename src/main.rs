@@ -35,7 +35,7 @@ fn set_form(status: &State<Status>) -> Template {
 
 #[post("/set", data = "<request>")]
 fn set(status: &State<Status>, request: Form<SetRequest>) -> &'static str {
-    let expected_password = var("SECRET").unwrap_or("grillpilled1312".into());
+    let expected_password = var("SECRET").unwrap();
     if request.password != expected_password {
         println!("failed password attempt: \"{}\"", request.password);
         "never talk to me again"
@@ -49,6 +49,9 @@ fn set(status: &State<Status>, request: Form<SetRequest>) -> &'static str {
 #[launch]
 fn serve() -> _ {
     let status = "NO".to_string();
+    if var("SECRET").is_err() {
+        panic!("must set SECRET");
+    }
     rocket::build()
         .mount("/", routes![index, set_form, set])
         .manage(RwLock::new(status))
